@@ -1,0 +1,156 @@
+Arduino + connecting wires + led + bread board (926):https://www.amazon.in/Robocraze-Starter-Arduino-Breadboard-Beginners/dp/B07FD357R2/ref=sr_1_7?crid=3OCA1ES6BM47Q&dchild=1&keywords=led+for+arduino&qid=1601260060&sprefix=led+for+ar%2Caps%2C281&sr=8-7
+wifi module(287): https://www.amazon.in/Robocraze-8266-01-Wi-Fi-Wireless-Black/dp/B072KTGL9S/ref=sr_1_4?crid=36RH8JPC57DSZ&dchild=1&keywords=arduino+wifi+module&qid=1601258876&sprefix=arduino+wifi+m%2Caps%2C279&sr=8-4
+ultrasonic sensor(112+70): https://www.amazon.in/Banggood-Ultrasonic-Distance-Measuring-Transducer/dp/B01I1ZTPJC/ref=sr_1_4?crid=3BIQ1VMY79I44&dchild=1&keywords=ultrasonic+sensor&qid=1601259070&sprefix=ultra%2Caps%2C292&sr=8-4
+turbidity sensor(900): https://robu.in/product/turbidity-sensor-module/?gclid=CjwKCAjw8MD7BRArEiwAGZsrBbqhm8abnS0h_mWo4BPCPC8TUOnR07Z57O0eF2pXg3YHIZnFSMJFjhoCYRkQAvD_BwE
+relay module(150): https://www.amazon.in/AusleseTM-Channel-Module-Raspberry-Trigger/dp/B08C7W3B41/ref=sr_1_6?crid=33THY6ULWH57M&dchild=1&keywords=relay+module&qid=1601259531&sprefix=relay+m%2Caps%2C288&sr=8-6
+
+
+total=2445.Rs
+
+
+# include <stdlib.h>
+struct node
+{
+  struct node *prev;
+  int data;
+  struct node* next;
+};
+
+struct node * top=NULL, *t,*n;
+int i=0;
+
+push()
+{
+  n=(struct node *)malloc(sizeof(struct node));
+  n->data=25+i++;
+  n->next=NULL;
+  n->prev=NULL;
+  if (top==NULL)
+     top=n;
+  else
+  {
+    n->prev=top;
+    top->next=n;
+    top=top->next;
+  }  
+    
+}
+
+pop()
+{
+  if (top==NULL)
+     puts("The stack is empty an underflow situation reached");
+  else
+  {
+    /* deleting the last element in the list */
+    t=top;
+    printf("\n The delete element is %d \n",t->data);
+    top=top->prev;
+    if (!top)
+       top->next=NULL;
+    free(t);
+  }
+  
+}
+display()
+{
+   if (top==NULL)
+     puts("The stack is empty");
+  else
+  {
+    puts("\n The elements in the stack are:");
+    t=top;
+    while(t)
+    {
+      printf(" %d \t",t->data);
+      t=t->prev;
+    }
+  }
+}
+
+int main() 
+{
+  push();
+  push();
+  display();
+  pop();
+  display();
+  pop();
+  display();
+  
+
+  return 0;
+}
+
+
+
+/* implementing Queue using lists */
+# include <stdlib.h>
+struct node
+{
+  
+  int data;
+  struct node* next;
+};
+
+struct node * front=NULL,*rear=NULL,*n;
+int i=0;
+insert()
+{
+  n=(struct node *)malloc(sizeof(struct node));
+  n->data=25+i++;
+  n->next=NULL;
+  if (rear==NULL)
+     front=rear=n;
+  else
+  {
+    rear->next=n;
+    rear=rear->next;
+  }  
+    
+}
+
+delet()
+{
+  if (front==NULL)
+     puts("The queue is empty an underflow situation reached");
+  else
+  {
+    /* deleting the last element in the list */
+    n=front;
+    printf("\n The deleted element is %d \n",n->data);
+    front=front->next;
+    free(n);
+  }
+  
+}
+display()
+{
+   if (front==NULL)
+     puts("The stack is empty");
+  else
+  {
+    puts("\n The elements in the queue are:");
+    n=front;
+    while(n)
+    {
+      printf(" %d \t",n->data);
+      n=n->next;
+    }
+  }
+}
+
+int main() 
+{
+  insert();
+  insert();
+  insert();
+  display();
+  delet();
+  display();
+  delet();
+  display();
+  
+
+  return 0;
+}

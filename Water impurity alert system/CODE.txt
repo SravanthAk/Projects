@@ -1,0 +1,384 @@
+WIFI:
+/*************************************************************
+  Download latest Blynk library here:
+    https://github.com/blynkkk/blynk-library/releases/latest
+
+  Blynk is a platform with iOS and Android apps to control
+  Arduino, Raspberry Pi and the likes over the Internet.
+  You can easily build graphic interfaces for all your
+  projects by simply dragging and dropping widgets.
+
+    Downloads, docs, tutorials: http://www.blynk.cc
+    Sketch generator:           http://examples.blynk.cc
+    Blynk community:            http://community.blynk.cc
+    Follow us:                  http://www.fb.com/blynkapp
+                                http://twitter.com/blynk_app
+
+  Blynk library is licensed under MIT license
+  This example code is in public domain.
+
+ *************************************************************
+  WARNING!
+    It's very tricky to get it working. Please read this article:
+    http://help.blynk.cc/hardware-and-libraries/arduino/esp8266-with-at-firmware
+
+  This example shows how value can be pushed from Arduino to
+  the Blynk App.
+
+  NOTE:
+  BlynkTimer provides SimpleTimer functionality:
+    http://playground.arduino.cc/Code/SimpleTimer
+
+  App project setup:
+    Value Display widget attached to Virtual Pin V5
+ *************************************************************/
+
+/* Comment this out to disable prints and save space */
+#define BLYNK_PRINT Serial
+
+
+#include <ESP8266_Lib.h>
+#include <BlynkSimpleShieldEsp8266.h>
+int turbidity;
+float volt;
+
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
+char auth[] = "_is4624C9fTgwxN-eUntKDoDXu8apjVZ";
+
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "pubg";
+char pass[] = "yaHoo111@";
+
+// Hardware Serial on Mega, Leonardo, Micro...
+//#define EspSerial Serial1
+
+// or Software Serial on Uno, Nano...
+#include <SoftwareSerial.h>
+SoftwareSerial EspSerial(2, 3); // RX, TX
+
+// Your ESP8266 baud rate:
+#define ESP8266_BAUD 9600
+
+ESP8266 wifi(&EspSerial);
+
+BlynkTimer timer;
+
+// This function sends Arduino's up time every second to Virtual Pin (5).
+// In the app, Widget's reading frequency should be set to PUSH. This means
+// that you define how often to send data to Blynk App.
+void setup()
+{
+  // Debug console
+  Serial.begin(9600);
+  // Set ESP8266 baud rate
+  pinMode(A0,INPUT);
+  EspSerial.begin(ESP8266_BAUD);
+  delay(10);
+
+  Blynk.begin(auth, wifi, ssid, pass);
+  // You can also specify server:
+  //Blynk.begin(auth, wifi, ssid, pass, "blynk-cloud.com", 80);
+  //Blynk.begin(auth, wifi, ssid, pass, IPAddress(192,168,1,100), 8080);
+
+  // Setup a function to be called every second
+  timer.setInterval(1000L, sendSensor);
+}
+
+void loop()
+{
+  Blynk.run();
+  timer.run(); // Initiates BlynkTimer
+}
+void sendSensor()
+{
+  turbidity=analogRead(A0);
+  volt=turbidity*(5.0/1024.0)*3;
+  Serial.println(volt); 
+  delay(200);  
+  if(volt <= 5)
+  {
+    Blynk.notify("Post has been twitted");
+  }
+  Blynk.virtualWrite(V0, volt);
+  delay(1000);                        //Pause for 3 seconds and start measuring distance again
+}
+
+
+
+
+ULTRASONIC SENSOR
+int trigPin = 9;
+int echoPin = 10;
+int led = 7;
+
+
+void setup() {
+  Serial.begin(9600); 
+   pinMode(led, OUTPUT);
+   pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  long duration, distance;
+  digitalWrite(trigPin,HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(trigPin, LOW);
+  duration=pulseIn(echoPin, HIGH);
+  distance =(duration/2)/29.1;
+  Serial.print(distance);
+  Serial.println("CM");
+  delay(10);
+ 
+ if((distance<=10)) 
+  {
+    digitalWrite(led, HIGH);
+}
+   else if(distance>10)
+ {
+     digitalWrite(led, LOW);
+   }
+}
+
+
+
+ULTRASONIC +WIFI
+/*************************************************************
+  Download latest Blynk library here:
+    https://github.com/blynkkk/blynk-library/releases/latest
+
+  Blynk is a platform with iOS and Android apps to control
+  Arduino, Raspberry Pi and the likes over the Internet.
+  You can easily build graphic interfaces for all your
+  projects by simply dragging and dropping widgets.
+
+    Downloads, docs, tutorials: http://www.blynk.cc
+    Sketch generator:           http://examples.blynk.cc
+    Blynk community:            http://community.blynk.cc
+    Follow us:                  http://www.fb.com/blynkapp
+                                http://twitter.com/blynk_app
+
+  Blynk library is licensed under MIT license
+  This example code is in public domain.
+
+ *************************************************************
+  WARNING!
+    It's very tricky to get it working. Please read this article:
+    http://help.blynk.cc/hardware-and-libraries/arduino/esp8266-with-at-firmware
+
+  This example shows how value can be pushed from Arduino to
+  the Blynk App.
+
+  NOTE:
+  BlynkTimer provides SimpleTimer functionality:
+    http://playground.arduino.cc/Code/SimpleTimer
+
+  App project setup:
+    Value Display widget attached to Virtual Pin V5
+ *************************************************************/
+
+/* Comment this out to disable prints and save space */
+#define BLYNK_PRINT Serial
+
+
+#include <ESP8266_Lib.h>
+#include <BlynkSimpleShieldEsp8266.h>
+#define  trig 7
+#define  echo 8
+long duration;
+int distance;
+
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
+char auth[] = "_is4624C9fTgwxN-eUntKDoDXu8apjVZ";
+
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "pubg";
+char pass[] = "yaHoo111@";
+
+// Hardware Serial on Mega, Leonardo, Micro...
+//#define EspSerial Serial1
+
+// or Software Serial on Uno, Nano...
+#include <SoftwareSerial.h>
+SoftwareSerial EspSerial(2, 3); // RX, TX
+
+// Your ESP8266 baud rate:
+#define ESP8266_BAUD 9600
+
+ESP8266 wifi(&EspSerial);
+
+BlynkTimer timer;
+
+// This function sends Arduino's up time every second to Virtual Pin (5).
+// In the app, Widget's reading frequency should be set to PUSH. This means
+// that you define how often to send data to Blynk App.
+void setup()
+{
+  // Debug console
+  Serial.begin(9600);
+  pinMode(trig, OUTPUT);  // Sets the trigPin as an Output
+  pinMode(echo, INPUT);   // Sets the echoPin as an Inpu
+  // Set ESP8266 baud rate
+  EspSerial.begin(ESP8266_BAUD);
+  delay(10);
+
+  Blynk.begin(auth, wifi, ssid, pass);
+  // You can also specify server:
+  //Blynk.begin(auth, wifi, ssid, pass, "blynk-cloud.com", 80);
+  //Blynk.begin(auth, wifi, ssid, pass, IPAddress(192,168,1,100), 8080);
+
+  // Setup a function to be called every second
+  timer.setInterval(1000L, sendSensor);
+}
+
+void loop()
+{
+  Blynk.run();
+  timer.run(); // Initiates BlynkTimer
+}
+void sendSensor()
+{
+  digitalWrite(trig, LOW);   // Makes trigPin low
+  delayMicroseconds(2);       // 2 micro second delay
+
+  digitalWrite(trig, HIGH);  // tigPin high
+  delayMicroseconds(10);      // trigPin high for 10 micro seconds
+  digitalWrite(trig, LOW);   // trigPin low
+
+  duration = pulseIn(echo, HIGH);   //Read echo pin, time in microseconds
+  distance = duration * 0.034 / 2;   //Calculating actual/real distance
+
+  Serial.print("Distance = ");        //Output distance on arduino serial monitor
+  Serial.println(distance);
+  
+  if(distance <= 5)
+  {
+    Blynk.notify("Post has been twitted");
+  }
+  Blynk.virtualWrite(V0, distance);
+  delay(1000);                        //Pause for 3 seconds and start measuring distance again
+}
+
+TURBIDITY
+void setup() {
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  int turbidity=analogRead(A0);
+  Serial.println(turbidity); 
+  delay(1000);
+}
+
+TURBIDITY +WIFI
+/*************************************************************
+  Download latest Blynk library here:
+    https://github.com/blynkkk/blynk-library/releases/latest
+
+  Blynk is a platform with iOS and Android apps to control
+  Arduino, Raspberry Pi and the likes over the Internet.
+  You can easily build graphic interfaces for all your
+  projects by simply dragging and dropping widgets.
+
+    Downloads, docs, tutorials: http://www.blynk.cc
+    Sketch generator:           http://examples.blynk.cc
+    Blynk community:            http://community.blynk.cc
+    Follow us:                  http://www.fb.com/blynkapp
+                                http://twitter.com/blynk_app
+
+  Blynk library is licensed under MIT license
+  This example code is in public domain.
+
+ *************************************************************
+  WARNING!
+    It's very tricky to get it working. Please read this article:
+    http://help.blynk.cc/hardware-and-libraries/arduino/esp8266-with-at-firmware
+
+  This example shows how value can be pushed from Arduino to
+  the Blynk App.
+
+  NOTE:
+  BlynkTimer provides SimpleTimer functionality:
+    http://playground.arduino.cc/Code/SimpleTimer
+
+  App project setup:
+    Value Display widget attached to Virtual Pin V5
+ *************************************************************/
+
+/* Comment this out to disable prints and save space */
+#define BLYNK_PRINT Serial
+
+
+#include <ESP8266_Lib.h>
+#include <BlynkSimpleShieldEsp8266.h>
+int turbidity;
+float volt;
+
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
+char auth[] = "_is4624C9fTgwxN-eUntKDoDXu8apjVZ";
+
+// Your WiFi credentials.
+// Set password to "" for open networks.
+char ssid[] = "pubg";
+char pass[] = "yaHoo111@";
+
+// Hardware Serial on Mega, Leonardo, Micro...
+//#define EspSerial Serial1
+
+// or Software Serial on Uno, Nano...
+#include <SoftwareSerial.h>
+SoftwareSerial EspSerial(2, 3); // RX, TX
+
+// Your ESP8266 baud rate:
+#define ESP8266_BAUD 9600
+
+ESP8266 wifi(&EspSerial);
+
+BlynkTimer timer;
+
+// This function sends Arduino's up time every second to Virtual Pin (5).
+// In the app, Widget's reading frequency should be set to PUSH. This means
+// that you define how often to send data to Blynk App.
+void setup()
+{
+  // Debug console
+  Serial.begin(9600);
+  // Set ESP8266 baud rate
+  pinMode(A0,INPUT);
+  EspSerial.begin(ESP8266_BAUD);
+  delay(10);
+
+  Blynk.begin(auth, wifi, ssid, pass);
+  // You can also specify server:
+  //Blynk.begin(auth, wifi, ssid, pass, "blynk-cloud.com", 80);
+  //Blynk.begin(auth, wifi, ssid, pass, IPAddress(192,168,1,100), 8080);
+
+  // Setup a function to be called every second
+  timer.setInterval(1000L, sendSensor);
+}
+
+void loop()
+{
+  Blynk.run();
+  timer.run(); // Initiates BlynkTimer
+}
+void sendSensor()
+{
+  turbidity=analogRead(A0);
+  Serial.println(turbidity); 
+  delay(200);  
+  if(turbidity <= 5)
+  {
+    Blynk.notify("Post has been twitted");
+  }
+  Blynk.virtualWrite(V0, turbidity);
+  delay(1000);                        //Pause for 3 seconds and start measuring distance again
+}
